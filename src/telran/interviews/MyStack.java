@@ -19,21 +19,21 @@ public class MyStack<T> {
 	}
 	
 	
-	public class Frame {
-		public T value;
-		public Frame next;
-		public Frame prev;
+	class Frame {
+		private T value;
+		private Frame next;
+		private Frame prev;
 		
-		public Frame(T value) {
+		private Frame(T value) {
 			this.value = value;
 		}
 		
-		public void addNext(Frame next) {
+		private void addNext(Frame next) {
 			next.prev = this;
 			this.next = next;
 		}
 		
-		public T remove() {
+		private T remove() {
 			if (prev != null) {
 				prev.next = null;
 				prev = null;
