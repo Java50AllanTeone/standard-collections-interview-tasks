@@ -1,5 +1,6 @@
 package telran.interviews;
 
+import java.util.NoSuchElementException;
 
 public class ShootingRating {
 	static final double RATE_FACTOR = 0.7;
@@ -12,11 +13,14 @@ public class ShootingRating {
 		int rate = 0;
 		
 		for (int hit : hittingResults) {
+			if (hit > RANGE || hit < 0) {
+				throw new NoSuchElementException();
+			}
 			lookup[hit]++;
 		}
 		
 		for (int i = 0; i < lookup.length; i++) {
-			while (lookup[i] > 0 && border > 0) {
+			while (lookup[i] > 0 && border >= 0) {
 				rate = i;
 				lookup[i]--;
 				border--;
