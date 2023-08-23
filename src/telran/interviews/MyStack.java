@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class MyStack<T> {
-	private Frame last;
-	private Frame lastMax;
+	private Frame<T> last;
+	private Frame<T> lastMax;
 	private Comparator<T> comp;
 	
 	public MyStack(Comparator<T> comp) {
@@ -19,16 +19,16 @@ public class MyStack<T> {
 	}
 	
 	
-	class Frame {
+	private static class Frame<T> {
 		private T value;
-		private Frame next;
-		private Frame prev;
+		private Frame<T> next;
+		private Frame<T> prev;
 		
 		private Frame(T value) {
 			this.value = value;
 		}
 		
-		private void addNext(Frame next) {
+		private void addNext(Frame<T> next) {
 			next.prev = this;
 			this.next = next;
 		}
@@ -55,15 +55,15 @@ public class MyStack<T> {
 	}
 
 	public void push(T element) {
-		Frame cur = new Frame(element);
+		Frame<T> cur = new Frame<T>(element);
 		
 		if (isEmpty()) {
-			lastMax = new Frame(element);
+			lastMax = new Frame<T>(element);
 		} else {
 			last.addNext(cur);
 			
 			if (Objects.compare(element, lastMax.value, comp) > 0) {
-				lastMax.addNext(new Frame(element));
+				lastMax.addNext(new Frame<T>(element));
 				lastMax = lastMax.next;
 			}
 		}
@@ -75,7 +75,7 @@ public class MyStack<T> {
 			throw new NoSuchElementException();
 		}
 		
-		Frame victim = last;
+		Frame<T> victim = last;
 		last = last.prev;
 		T removed = victim.remove();
 
