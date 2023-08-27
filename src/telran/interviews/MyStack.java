@@ -69,11 +69,13 @@ public class MyStack<T> {
 		}
 		last = cur;
 	}
+
 	
 	public T pop() {
 		if (isEmpty()) {
 			throw new NoSuchElementException();
 		}
+		
 		
 		Frame<T> victim = last;
 		last = last.prev;

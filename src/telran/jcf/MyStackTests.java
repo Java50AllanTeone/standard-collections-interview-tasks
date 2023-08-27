@@ -63,6 +63,7 @@ class MyStackTests {
 		stack.push(50);
 		assertEquals(50, stack.getMax());
 		
+		
 		stack.pop();
 		assertEquals(10, stack.getMax());
 		stack.pop();
