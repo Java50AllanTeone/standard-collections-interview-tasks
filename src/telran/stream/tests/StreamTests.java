@@ -7,6 +7,8 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -93,67 +95,59 @@ class StreamTests {
 		displayOccurences(strings);
 	}
 	
-	
-	
 	@Test
-	void printDigitStatistics() {
-		int[] numbers = getNumbers();
-		
-		
-		Arrays.stream(numbers)
-		.mapToObj(Integer::toString)
-		.map(StreamTests::getArr)
-		.flatMapToInt(Arrays::stream)
-		.boxed()
-		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-		.entrySet()
-		.stream()
-		.sorted((e1, e2) -> {
-			int res = Long.compare(e2.getValue(), e1.getValue());
-			return res == 0 ? e1.getKey() - e2.getKey() : res;
-		})
-		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
-		
-		
-
-		
-		
-
-	}
-	
-	void printDigitStatistics2() {
-		int[] numbers = getNumbers();
-		
-		StringBuilder sb = new StringBuilder();
-		
-		Arrays.stream(numbers)
-		.mapToObj(Integer::toString)
-		.forEach(e -> sb.append(e));
-		
-		sb.toString().chars()
-		.boxed()
-		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-		.entrySet()
-		.stream()
-		.sorted((e1, e2) -> {
-			int res = Long.compare(e2.getValue(), e1.getValue());
-			return res == 0 ? e1.getKey() - e2.getKey() : res;
-		})
-		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
-		
-		
-	}
-	
-	private static int[] getArr(String num) {
-		return num.chars()				
-		.map(Character::getNumericValue)
-		.toArray();
+	void print() {
+		printDigitStatistics();
 	}
 	
 	private int[] getNumbers() {
 		return new Random()
-				.ints(1_000_000, 0, Integer.MAX_VALUE)
+				.ints(1_000, 0, Integer.MAX_VALUE)
 				.toArray();
 	}
-
+	
+	
+	void printDigitStatistics() {	
+		Arrays.stream(getNumbers())
+		.mapToObj(Integer::toString)
+		.map(StreamTests::getArr)
+		.flatMapToInt(e -> e)
+		.boxed()
+		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
+		.entrySet()
+		.stream()
+		.sorted((e1, e2) -> {
+			int res = Long.compare(e2.getValue(), e1.getValue());
+			return res == 0 ? e1.getKey() - e2.getKey() : res;
+		})
+		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
+	}
+	
+	private static IntStream getArr(String num) {
+		return num
+				.chars()				
+				.map(Character::getNumericValue);
+	}
+	
+	
+//	void printDigitStatistics() {
+//		StringBuilder sb = new StringBuilder();
+//		
+//		Arrays.stream(getNumbers())
+//		.mapToObj(Integer::toString)
+//		.forEach(e -> sb.append(e));
+//		
+//		sb.toString().chars()
+//		.map(Character::getNumericValue)
+//		.boxed()
+//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
+//		.entrySet()
+//		.stream()
+//		.sorted((e1, e2) -> {
+//			int res = Long.compare(e2.getValue(), e1.getValue());
+//			return res == 0 ? e1.getKey() - e2.getKey() : res;
+//		})
+//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
+//	}
+	
 }
