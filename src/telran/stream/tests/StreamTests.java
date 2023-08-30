@@ -3,12 +3,16 @@ package telran.stream.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -102,32 +106,83 @@ class StreamTests {
 	
 	private int[] getNumbers() {
 		return new Random()
-				.ints(1_000, 0, Integer.MAX_VALUE)
+				.ints(10_000_000, 0, 10_000_000)
 				.toArray();
 	}
 	
 	
-	void printDigitStatistics() {	
-		Arrays.stream(getNumbers())
-		.mapToObj(Integer::toString)
-		.map(StreamTests::getArr)
-		.flatMapToInt(e -> e)
-		.boxed()
-		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-		.entrySet()
-		.stream()
-		.sorted((e1, e2) -> {
-			int res = Long.compare(e2.getValue(), e1.getValue());
-			return res == 0 ? e1.getKey() - e2.getKey() : res;
-		})
-		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
+//	void printDigitStatistics() {	
+//		Arrays.stream(getNumbers())
+//		.mapToObj(Integer::toString)
+//		.map(StreamTests::getArr)
+//		.flatMapToInt(e -> e)
+//		.boxed()
+//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
+//		.entrySet()
+//		.stream()
+//		.sorted((e1, e2) -> {
+//			int res = Long.compare(e2.getValue(), e1.getValue());
+//			return res == 0 ? e1.getKey() - e2.getKey() : res;
+//		})
+//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
+//	}
+	
+	void printDigitStatistics() {
+		int[] lookup = new int[10];
+		
+		new Random()
+		.ints(10_000_000, 0, 10_000_000)
+		.flatMap(e -> Integer.toString(e).chars().map(Character::getNumericValue))
+		.forEach(e -> lookup[e]++);
+		
+//		TreeMap<Integer, Integer> map = new TreeMap<>(Comparator.reverseOrder());
+//		
+//		for (int i = 0; i < lookup.length; i++)
+//			map.put(lookup[i], i);
+//		
+//		map.entrySet().stream().forEach(e -> System.out.printf("%d: %d\n", e.getValue(), e.getKey()));
 	}
 	
-	private static IntStream getArr(String num) {
-		return num
-				.chars()				
-				.map(Character::getNumericValue);
+	private static IntStream getStream(int num) {
+		var builder = IntStream.builder();
+		
+		while (num != 0) {
+			builder.add(num % 10);
+			num /= 10;
+		}
+		return builder.build();
 	}
+		
+		
+//		.mapToObj(Integer::toString)
+//		.map(StreamTests::getArr)
+//		.flatMapToInt(e -> e)
+//		.boxed()
+//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
+//		.entrySet()
+//		.stream()
+//		.sorted((e1, e2) -> {
+//			int res = Long.compare(e2.getValue(), e1.getValue());
+//			return res == 0 ? e1.getKey() - e2.getKey() : res;
+//		})
+//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
+//	}
+	
+		private static IntStream getArr(String num) {
+			return num
+					.chars()				
+					.map(Character::getNumericValue);
+		}
+		
+		
+
+	
+
+	//2.263
+	//1.922
+	
+	//Kley 1.706
+	//3.924
 	
 	
 //	void printDigitStatistics() {
