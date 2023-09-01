@@ -2,20 +2,13 @@ package telran.stream.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TreeMap;
+
+import java.util.*;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import telran.stream.StreamTasks;
 
 class StreamTests {
 
@@ -79,130 +72,50 @@ class StreamTests {
 	}
 	
 	private void displayOccurences(String[] strings) {
-		Arrays.stream(strings)
-		.collect(Collectors.groupingBy(s -> s, Collectors.counting()))
-		.entrySet()
-		.stream()
-		.sorted((e1, e2) -> {
+//		Arrays.stream(strings)
+//		.collect(Collectors.groupingBy(s -> s, Collectors.counting()))
+//		.entrySet()
+//		.stream()
+//		.sorted((e1, e2) -> {
+//			int res = Long.compare(e2.getValue(), e1.getValue());
+//			return res == 0 ? e1.getKey().compareTo(e2.getKey()) : res;
+//		})
+//		.forEach(e -> System.out.printf("\nKey %s, %s", e.getKey(), e.getValue()));
+		
+		Map<String, Integer> map = getMap(strings);
+		List<Map.Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
+		list.sort((e1, e2) -> {
 			int res = Long.compare(e2.getValue(), e1.getValue());
 			return res == 0 ? e1.getKey().compareTo(e2.getKey()) : res;
-		})
-		.forEach(e -> System.out.printf("\nKey %s, %s", e.getKey(), e.getValue()));
-//		.forEach((k, v) -> System.out.printf("\nKey %s, %s", k, v));
+		});
+		list.forEach(e -> System.out.printf("%s -> %s\n", e.getKey(), e.getValue()));
+
 
 	}
 	
+	private Map<String, Integer> getMap(String[] strings) {
+		Map< String, Integer> res = new HashMap<>();
+		for (String str : strings) {
+			res.merge(str, 1, Integer::sum);
+		}
+		return res;
+	}
+
 	@Test
-	@Disabled
+//	@Disabled
 	void displayOccurencesTest() {
 		String[] strings = {"lmn", "ab", "lmn", "ab", "a", "c", "a", "lmn"};
 		displayOccurences(strings);
 	}
-	
-	@Test
-	void print() {
-		printDigitStatistics();
-	}
-	
-	private int[] getNumbers() {
-		return new Random()
-				.ints(10_000_000, 0, 10_000_000)
-				.toArray();
-	}
-	
-	
-//	void printDigitStatistics() {	
-//		Arrays.stream(getNumbers())
-//		.mapToObj(Integer::toString)
-//		.map(StreamTests::getArr)
-//		.flatMapToInt(e -> e)
-//		.boxed()
-//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-//		.entrySet()
-//		.stream()
-//		.sorted((e1, e2) -> {
-//			int res = Long.compare(e2.getValue(), e1.getValue());
-//			return res == 0 ? e1.getKey() - e2.getKey() : res;
-//		})
-//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
-//	}
-	
-	void printDigitStatistics() {
-		int[] lookup = new int[10];
-		
-		new Random()
-		.ints(10_000_000, 0, 10_000_000)
-		.flatMap(e -> Integer.toString(e).chars().map(Character::getNumericValue))
-		.forEach(e -> lookup[e]++);
-		
-//		TreeMap<Integer, Integer> map = new TreeMap<>(Comparator.reverseOrder());
-//		
-//		for (int i = 0; i < lookup.length; i++)
-//			map.put(lookup[i], i);
-//		
-//		map.entrySet().stream().forEach(e -> System.out.printf("%d: %d\n", e.getValue(), e.getKey()));
-	}
-	
-	private static IntStream getStream(int num) {
-		var builder = IntStream.builder();
-		
-		while (num != 0) {
-			builder.add(num % 10);
-			num /= 10;
-		}
-		return builder.build();
-	}
-		
-		
-//		.mapToObj(Integer::toString)
-//		.map(StreamTests::getArr)
-//		.flatMapToInt(e -> e)
-//		.boxed()
-//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-//		.entrySet()
-//		.stream()
-//		.sorted((e1, e2) -> {
-//			int res = Long.compare(e2.getValue(), e1.getValue());
-//			return res == 0 ? e1.getKey() - e2.getKey() : res;
-//		})
-//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
-//	}
-	
-		private static IntStream getArr(String num) {
-			return num
-					.chars()				
-					.map(Character::getNumericValue);
-		}
-		
-		
 
 	
+	
 
-	//2.263
-	//1.922
-	
-	//Kley 1.706
-	//3.924
-	
-	
-//	void printDigitStatistics() {
-//		StringBuilder sb = new StringBuilder();
-//		
-//		Arrays.stream(getNumbers())
-//		.mapToObj(Integer::toString)
-//		.forEach(e -> sb.append(e));
-//		
-//		sb.toString().chars()
-//		.map(Character::getNumericValue)
-//		.boxed()
-//		.collect(Collectors.groupingBy(e -> e, Collectors.counting()))
-//		.entrySet()
-//		.stream()
-//		.sorted((e1, e2) -> {
-//			int res = Long.compare(e2.getValue(), e1.getValue());
-//			return res == 0 ? e1.getKey() - e2.getKey() : res;
-//		})
-//		.forEach(e -> System.out.printf("%d: %d\n", e.getKey(), e.getValue()));
-//	}
+		
+		@Test
+		@Disabled
+		void printSportLotoNumbersTest() {
+			StreamTasks.printSportLotoNumbers();
+		}
 	
 }
