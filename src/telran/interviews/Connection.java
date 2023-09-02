@@ -11,6 +11,15 @@ public class Connection {
 		this.port = port;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "Connection [id=" + id + ", ipAddress=" + ipAddress + ", port=" + port + "]";
+	}
+
+
+
 	public int getId() {
 		return id;
 	}

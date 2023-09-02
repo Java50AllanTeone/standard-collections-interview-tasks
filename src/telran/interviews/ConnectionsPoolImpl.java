@@ -5,32 +5,30 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ConnectionsPoolImpl implements ConnectionsPool {
-	private int size;
-	LinkedHashMap<Integer, Connection> map;
+	public int size;
+	public LinkedHashMap<Integer, Connection> map;
 	
 
+	@SuppressWarnings("serial")
 	public ConnectionsPoolImpl(int size) {
 		super();
 		this.size = size;
 		map = new LinkedHashMap<>(size, 1, true) {
 			@Override
 			protected boolean removeEldestEntry(Map.Entry<Integer, Connection> map) {
-				return false;
-				
+				return size() > size;
 			}
 		};
 	}
 
 	@Override
 	public boolean addConnection(Connection connection) {
-		// TODO Auto-generated method stub
-		return false;
+		return map.putIfAbsent(connection.getId(), connection) == null;
 	}
 
 	@Override
 	public Connection getConnection(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return map.get(id);
 	}
 
 }
