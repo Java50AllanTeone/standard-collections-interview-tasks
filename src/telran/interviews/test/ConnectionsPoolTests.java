@@ -35,6 +35,7 @@ class ConnectionsPoolTests {
 		con.addConnection(new Connection(6, Integer.toString(6), 6));
 		Integer[] expected1 = {3, 4, 5, 1, 6};
 		assertArrayEquals(expected1, con.map.values().stream().map(e -> e.getId()).toArray());
+		
 	}
 
 }
